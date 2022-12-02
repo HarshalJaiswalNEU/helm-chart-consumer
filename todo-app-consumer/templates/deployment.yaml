@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo-app-consumer.name" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ include "todo-app-consumer-consumer.name" .}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSecondsCount }}
+  minReadySeconds: {{ .Values.minReadySecondsCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ include "todo-app-consumer.name" .}}
+  template:
+    metadata:
+      labels:
+        app: {{ include "todo-app-consumer.name" .}}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.appContainer.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "todo-app-consumer.name" . }}-config
+          resources:
+            requests:
+              memory: {{ .Values.requests.memory }}
+              cpu: {{ .Values.requests.cpu }}
+            limits:
+              memory: {{ .Values.limits.memory }}
+              cpu: {{ .Values.limits.cpu }}

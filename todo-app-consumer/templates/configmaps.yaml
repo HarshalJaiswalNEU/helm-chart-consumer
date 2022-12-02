@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "todo-app-consumer-consumer.name" . }}-config
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ include "todo-app-consumer-consumer.name" .}}
+data:
+  ELASTIC_ENDPOINT: {{ .Values.data.elastic_endpoint }}
+  KAFKA_BROKER: {{ .Values.data.kafka_broker }}
+  KAFKA_TOPIC: {{ .Values.data.kafka_topic }}
