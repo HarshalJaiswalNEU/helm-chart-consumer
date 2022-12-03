@@ -5,7 +5,7 @@ metadata:
   name: {{ include "todo-app-consumer.name" . }}
   namespace: {{ .Values.namespace }}
   labels:
-    app: {{ include "todo-app-consumer-consumer.name" .}}
+    app: {{ include "todo-app-consumer.name" .}}
 spec:
   replicas: {{ .Values.replicaCount }}
   progressDeadlineSeconds: {{ .Values.progressDeadlineSecondsCount }}
